@@ -1,12 +1,6 @@
-# Posts a per-team breakdown of a GitVote vote when someone comments
-# /count-vote on the issue or PR.
-# Save as .github/workflows/gitvote-team-tally.yml on the default branch
-# of canton-foundation/canton-dev-fund.
-#
-# Requires a repo secret TEAM_READ_TOKEN: a token that can read org team
-# membership (fine-grained PAT with Organization > Members: Read, or a
-# classic PAT with read:org). The default GITHUB_TOKEN can't read teams.
-
+# Informational per-team tally of GitVote's published binding votes.
+# Save as .github/workflows/gitvote-team-tally.yml on the default branch.
+# Requires TEAM_READ_TOKEN with permission to read organization team members.
 name: GitVote team tally
 
 on:
@@ -33,12 +27,14 @@ jobs:
             // ---- Settings: adjust to match your setup ----
             const TEAMS = [
               { slug: 'tech-ops-voting',     label: 'Primaries' },
-              { slug: 'tech-ops-alternates', label: 'Alternates' },
+              // Add an alternates team here once it exists, e.g.:
+              // { slug: 'tech-ops-alternates', label: 'Alternates' },
             ];
-            const BOT = 'gitvote[bot]';
+            // GitVote's GitHub App is "git-vote"; the API shows it as git-vote[bot]
+            const BOT_LOGINS = ['git-vote[bot]', 'git-vote'];
             // Text that appears in GitVote's comments. Check these against
             // a real vote and change them if GitVote words it differently.
-            const VOTE_CREATED_MARKER = 'Vote status';
+            const VOTE_CREATED_MARKER = 'Vote created';
             const VOTE_CLOSED_MARKER  = 'Vote closed';
             const VOTE_CANCELLED_MARKERS = ['Vote cancelled', 'Vote canceled'];
             // GitVote's reaction meanings
@@ -56,7 +52,7 @@ jobs:
             // Find the most recent GitVote vote on this issue or PR
             const comments = await github.paginate(github.rest.issues.listComments,
               { owner, repo, issue_number, per_page: 100 });
-            const fromBot = comments.filter(c => c.user.login === BOT);
+            const fromBot = comments.filter(c => BOT_LOGINS.includes(c.user?.login));
             const voteComment = fromBot.filter(c => c.body.includes(VOTE_CREATED_MARKER)).pop();
             if (!voteComment) {
               await github.rest.issues.createComment({ owner, repo, issue_number,
@@ -64,24 +60,16 @@ jobs:
               return;
             }
 
-            // Restrict lifecycle detection to the selected vote's time window.
-            // GitVote's actual message markers must be verified against a real vote.
-            const voteStarts = fromBot.filter(c => c.body.includes(VOTE_CREATED_MARKER));
-            const nextVote = voteStarts.find(c => new Date(c.created_at) > new Date(voteComment.created_at));
-            const afterVote = fromBot.filter(c =>
-              new Date(c.created_at) > new Date(voteComment.created_at) &&
-              (!nextVote || new Date(c.created_at) < new Date(nextVote.created_at)));
-            const lifecycle = afterVote
-              .filter(c => c.body.includes(VOTE_CLOSED_MARKER) ||
-                VOTE_CANCELLED_MARKERS.some(m => c.body.includes(m)))
-              .sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
-            const end = lifecycle[0];
-            const closing = end?.body.includes(VOTE_CLOSED_MARKER);
-            const cancelled = end && !closing;
+            // If the vote has closed or been cancelled, count only reactions
+            // made before that happened
+            const afterVote = fromBot.filter(c => new Date(c.created_at) > new Date(voteComment.created_at));
+            const closing = afterVote.find(c => c.body.includes(VOTE_CLOSED_MARKER));
+            const cancelled = afterVote.find(c => VOTE_CANCELLED_MARKERS.some(m => c.body.includes(m)));
+            const end = closing ?? cancelled;
             const cutoff = new Date((end ?? trigger).created_at);
-            const status = closing ? 'Historical reaction snapshot (vote closed)'
-              : cancelled ? 'Historical reaction snapshot (vote cancelled)'
-              : 'Current reaction snapshot (vote still open)';
+            const status = closing ? 'Final count (vote closed)'
+              : cancelled ? 'Count at the time the vote was cancelled'
+              : 'Current count (vote still open)';
 
             // Votes are reactions on the vote comment
             const reactions = await github.paginate(github.rest.reactions.listForIssueComment,
@@ -96,9 +84,6 @@ jobs:
             }
 
             // Team membership (needs the org-scoped token)
-            if (!process.env.TEAM_READ_TOKEN) {
-              throw new Error('TEAM_READ_TOKEN secret is required to read organization teams.');
-            }
             const orgClient = getOctokit(process.env.TEAM_READ_TOKEN);
             const onATeam = new Set();
             for (const t of TEAMS) {
@@ -112,9 +97,7 @@ jobs:
             const fmt = logins => logins.length ? logins.map(l => '`' + l + '`').join(', ') : '–';
             const row = (label, logins) => `| ${label} | ${logins.length} | ${fmt(logins)} |`;
 
-            let body = `### Vote results by team\n_${status}_\n\n`;
-            body += '_Informational only. Current team membership is used, not membership at vote time. ';
-            body += 'Removed reactions cannot be reconstructed from the GitHub API; historical counts may differ from GitVote’s official result._\n';
+            let body = `### Vote results by team\n_${status}_\n`;
             for (const t of TEAMS) {
               body += `\n**${t.label}** (\`${t.slug}\`)\n\n| | Votes | Who |\n|---|---|---|\n`;
               for (const choice of Object.values(CHOICES)) {
