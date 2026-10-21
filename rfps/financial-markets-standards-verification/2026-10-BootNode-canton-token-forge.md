@@ -133,6 +133,7 @@ No backward compatibility impact on the network or on other applications. v2 is 
     - A standard-only conformance suite covering v1, v2 and mixed v1/v2 flows, plus a recorded CN Token Standard CLI run against the service.
     - A standalone dpm component (`dpm canton-token-forge`), configured with the participant, authentication and admin party it targets, that uploads the DAR, seeds an admin and an instrument, and runs the registry service against a Splice LocalNet or any other participant, with a README an outside developer can follow.
     - 1.0 release: DAR versioned 1.0.0 (the v0.x releases ship it as 0.0.1) as a release asset, registry service published to npm, each release stating the SDK and Splice versions it was built against and the Canton version it was tested against.
+- **Acceptance Criteria:** 1.0 is released, and a developer outside BootNode, following only the README, adds it to a Splice LocalNet with the dpm component and completes a v1 and a v2 transfer through the registry API with a client that never names canton-token-forge.
 
 ### Milestone 2: Proving it on real test suites
 
@@ -145,15 +146,15 @@ No backward compatibility impact on the network or on other applications. v2 is 
     - The dAppBooster for Canton example dApp running its vesting flow on the 1.0.
     - At least one external team using it, verified by a written attestation from that team plus a public artifact where possible (repository, announcement or demo).
     - A short report on what the integrations surfaced: gaps in the token or service, and standard or tooling behaviors worth raising upstream.
+- **Acceptance Criteria:** the wallet repository pull request runs its token-standard end-to-end tests against canton-token-forge with all tests passing, delivered with the maintainer walkthrough; the dAppBooster example runs on the 1.0; at least one external team's usage is attested; and the integration report is delivered.
 
 ---
 
 ## Acceptance Criteria
 
-The Tech & Ops Committee will evaluate completion against the following. Milestones 1 and 2 can each be evaluated and paid out independently. Milestone 0 is not evaluated; it is the public baseline that Milestones 1 and 2 build on.
+The Tech & Ops Committee will evaluate each milestone against the **Acceptance Criteria** stated in that milestone above. Milestones 1 and 2 can each be evaluated and paid out independently. Milestone 0 is not evaluated; it is the public baseline Milestones 1 and 2 build on.
 
-1. **Milestone 1** is accepted when the 1.0 is released and a developer outside the team can, following only the README, add it to a Splice LocalNet with the dpm component and complete a v1 and a v2 transfer through the registry API with a client that never names canton-token-forge. The signal is adoptability by an outside team, not the presence of code.
-2. **Milestone 2** is accepted when the token is proven in real suites: the wallet repository pull request runs its token-standard end-to-end tests against canton-token-forge with all tests passing, accompanied by the maintainer walkthrough; the dAppBooster example runs against the 1.0; at least one external team's usage is attested; and the integration report is delivered. The signal is real suites running on a second backend and maintainers able to keep using it without us.
+Each milestone is judged on ecosystem value rather than code delivered. Milestone 1 shows that a team outside BootNode can adopt the token on its own, from the README alone. Milestone 2 shows that real suites run on it as a second backend, and that maintainers can keep using it without us.
 
 Documentation and knowledge transfer for each milestone are part of its acceptance. Payment is released on the Committee's acceptance of that value.
 
