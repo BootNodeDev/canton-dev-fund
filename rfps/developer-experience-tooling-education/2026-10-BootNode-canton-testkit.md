@@ -188,6 +188,7 @@ No backward compatibility impact. **canton-testkit** is a new, standalone librar
     - Assertion helpers for balances, contracts and effects.
     - A `seedSession` API for browser tests.
     - A CLI with `--help` and JSON output.
+- **Acceptance Criteria:** 1.0 is on npm, and a developer outside BootNode gets a passing end-to-end test against LocalNet following only the README.
 
 ### Milestone 2: Proving it on real test suites
 
@@ -199,15 +200,15 @@ No backward compatibility impact. **canton-testkit** is a new, standalone librar
     - A pull request to the wallet repository rewriting the setup of the `ping` and `portfolio` suites, with all tests passing.
     - A short report on what the rewrite surfaced: gaps in the library, and gateway behaviours worth raising upstream.
     - A walkthrough session with the wallet repository maintainers at Digital Asset, held before the pull request is reviewed: what changed in the ping and portfolio suites and why, how canton-testkit does what the removed setup did, and how to extend the suites with it from then on.
+- **Acceptance Criteria:** the dAppBooster example runs on **canton-testkit**, and a pull request moves the wallet repository's `ping` and `portfolio` suites onto it with all tests passing, delivered with the report and the maintainer walkthrough.
 
 ---
 
 ## Acceptance Criteria
 
-The Tech & Ops Committee will evaluate completion against the following. Each milestone can be evaluated and paid out independently.
+The Tech & Ops Committee will evaluate each milestone against the **Acceptance Criteria** stated in that milestone above. Each milestone can be evaluated and paid out independently.
 
-1. **Milestone 1** is accepted when **canton-testkit** 1.0 is published and a developer outside the team can, following only the README, install it and get a passing end-to-end test against LocalNet. The signal is adoptability by an outside team, not the presence of code.
-2. **Milestone 2** is accepted when the kit is proven to cover real dApps: the dAppBooster example is tested end-to-end with **canton-testkit**, and a pull request rewrites the Foundation wallet repository's `ping` and `portfolio` end-to-end suites on the kit, with all tests passing and their setup removed, accompanied by a report of the library gaps and gateway behaviors found during the rewrite, and by the walkthrough session with the maintainers described in Milestone 2. The signal is real suites running on the kit and the duplicated setup they retire, and the maintainers able to keep working on those suites without us.
+Each milestone is judged on ecosystem value rather than code delivered. Milestone 1 shows that a developer outside BootNode can adopt the kit on their own, from the README alone. Milestone 2 shows that real suites run on it, replacing the setup each one duplicates today.
 
 Documentation and knowledge transfer sessions for each milestone are part of its acceptance. Payment is released on the Committee's acceptance of that value.
 
