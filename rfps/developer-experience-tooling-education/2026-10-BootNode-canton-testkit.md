@@ -4,9 +4,9 @@
 | :---- | :---- |
 | Authors | Pablo Fullana <pablo@bootnode.dev> |
 | Org | [BootNode](https://bootnode.dev) |
-| Status | Draft |
+| Status | Submitted |
 | Created | 2026-10-08 |
-| PR | [TBD] |
+| PR | [#888](https://github.com/canton-foundation/canton-dev-fund/pull/888) |
 | Proposal Type | RFP-aligned |
 | RFP / Roadmap Area | RFP-18: Integration into SDLCs (Developer Experience, Tooling & Education) |
 | Champion | Needs Champion |
