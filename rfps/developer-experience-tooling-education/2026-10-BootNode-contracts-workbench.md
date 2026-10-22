@@ -209,9 +209,9 @@ The four milestones are two builds and the adoption of each: the developer app a
 - **Focus:** Prove that developers outside BootNode use the workbench in their own projects.
 - **Description:** Teams building on Canton add the workbench to their projects and use it in their development loop. BootNode supports them, and what they find missing is fixed in regular releases.
 - **Deliverables / Value Metrics:**
-    - 10 public repositories outside BootNode that declare **contracts-workbench** as a component.
-    - The list of those repositories, verifiable through GitHub code search.
-- **Acceptance Criteria:** within 6 months of Milestone 1 acceptance, 10 public repositories outside BootNode declare **contracts-workbench** as a component. Repositories owned by BootNode or its affiliates, forks and empty repositories do not qualify. The milestone is paid in full or not at all.
+    - At least 3 teams outside BootNode using **contracts-workbench** in their own projects, each confirmed by a written attestation from that team.
+    - A public artifact per team where possible (repository, announcement or demo).
+- **Acceptance Criteria:** within 6 months of Milestone 1 acceptance, at least 3 teams outside BootNode use **contracts-workbench** in their projects, each verified by a written attestation from that team plus a public artifact where possible. BootNode and its affiliates do not qualify. The milestone is paid in full or not at all.
 
 ### Milestone 4: Adoption of the SDK
 
@@ -219,8 +219,8 @@ The four milestones are two builds and the adoption of each: the developer app a
 - **Focus:** Prove the published packages are used where it matters: inside an explorer real users rely on, on a network other than LocalNet.
 - **Description:** An explorer team outside BootNode integrates the packages into its own application, pointed at DevNet, TestNet or a production participant, so its users create contracts and exercise choices from the screens where they already inspect them. The explorer keeps its own authentication, connection and submission path. BootNode supports the integration, and anything it shows to be missing from the public API is fixed in the packages rather than worked around in the explorer.
 - **Deliverables / Value Metrics:**
-    - Public, verifiable evidence of the integration (release notes, source or the live explorer) and a written confirmation from the explorer team.
-- **Acceptance Criteria:** within 6 months of Milestone 2 acceptance, an explorer maintained outside BootNode has adopted the packages, shown by public, verifiable evidence and confirmed in writing by its team.
+    - A written attestation from the explorer team, plus public evidence of the integration where possible (release notes, source or the live explorer).
+- **Acceptance Criteria:** within 6 months of Milestone 2 acceptance, an explorer maintained outside BootNode has adopted the packages, verified by a written attestation from its team plus public evidence where possible.
 
 ---
 
